@@ -1,0 +1,21 @@
+<div>
+	<span class="head_list">{{list.title}}: </span>
+	<a href="#" ng-click="removeList()" class="button list_delete">Delete list</a>	
+	<form ng-submit="addTask()">
+        <input type="text" placeholder="Some task" ng-model="content" required>
+    </form>
+
+	<ul>
+		<li ng-repeat="task in tasks">{{task.task.content}}
+			<a href="#" ng-click="removeTask()" class="button task_delete">&times;</a>
+		</li>
+	</ul>
+
+	<span class="head_list">User search</span>
+	<input ng-model="query" type="text" placeholder="search">
+	<ul>
+		<li ng-repeat="user in users | filter: query">
+			<a href="{{user._id}}" ng-click="addToShared()">{{user.userName}}</a>
+		</li>
+	</ul>
+</div>

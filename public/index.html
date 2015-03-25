@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="wunderlist">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel='stylesheet' href='stylesheets/style.css'/>
+	<script src='bower_components/angular/angular.min.js'></script>
+    <script src='bower_components/angular-resource/angular-resource.min.js'></script>
+    <script src='bower_components/angular-route/angular-route.min.js'></script>
+    <script src='javascripts/service.js'></script>
+    <script src='javascripts/controller.js'></script>
+    <script src='javascripts/app.js'></script>
+    <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<div class="wrapper">
+		<img src="image/main_bg.jpg" alt="" class="noblur">
+        <img src="image/main_bg_blur.jpg" alt="" class="blur">
+        <header>
+        	<div class="header_content">
+        		<div class="logo">
+                    <a href="/">
+                        <h1>
+                            <img src="image/logo.png" alt="">
+                            <span><base href="/"></base></span>
+                        </h1>
+                    </a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="users">Users</a></li>
+                        <li><a href="newuser">Sign up</a></li>
+                    </ul>
+                </nav>
+        	</div>
+        </header>
+		<div class="main">
+			<div>
+				<div class="content">
+					<article>
+						<div ng-view></div>
+					</article>
+				</div>
+			</div>
+		</div>
+		<footer>
+			<span>&copy; EPAM Artemenko VA, 2015.</span>
+		</footer>
+		<script>
+            window.onload = function() {
+                var height = document.documentElement.clientHeight;
+                var width = document.documentElement.clientWidth;
+                var ratio = width/(2*height);
+                var ratioConst = 1.125;
+                var h = Math.max(height - 110, 688);
+                var el = document.querySelector('.main>div');
+                el.style.height = h + 'px';
+                console.log(ratio);
+            }
+        </script>
+	</div>
+</body>
+</html>
