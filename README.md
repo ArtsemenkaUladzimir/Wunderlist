@@ -6,6 +6,4 @@
 * Angular
 * Node
 
-![wunderlist screenshot][mainscreen]
-[mainscreen]: https://github.com/vinfinit/wunderlist/raw/master/screenshots/main.png "Wunderlist"
-    
+![wunderlistscreenshot](https://github.com/vinfinit/wunderlist/raw/master/screenshots/main.png "Wunderlist")
