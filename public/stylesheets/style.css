@@ -89,6 +89,7 @@ header {
 
 .header_content .logo img {
     margin-right: .3em;
+    width: 6em;
 }
 
 .header_content .lang {
