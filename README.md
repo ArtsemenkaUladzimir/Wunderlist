@@ -1,6 +1,6 @@
 # Wunderlist
 
-### Wunderlist - ToDo list with special design. Was developed for Belarus State University like a course work using MEAN stack.
+### Wunderlist - ToDo list with special design. Was developed for Belarus State University using MEAN stack.
 * Mongo
 * Express
 * Angular
