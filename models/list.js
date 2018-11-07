@@ -1,13 +1,11 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-var listSchema = new Schema({
+const listSchema = new mongoose.Schema({
 	title : String,
 	tasks: [String],
 	shared: [String],
 	owner: String
 });
-
-var List = mongoose.model('List', listSchema);
+const List = mongoose.model('List', listSchema);
 
 module.exports = List;

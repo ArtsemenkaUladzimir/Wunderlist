@@ -1,47 +1,40 @@
-var express = require('express');
-var router = express.Router();
+const Promise = require('bluebird');
+const express = require('express');
+const router = express.Router();
 
-var Task = require('../models/task');
-var List = require('../models/list');
+const Task = require('../models/task');
+const List = require('../models/list');
 
-router.get('/', function (req, res) {
-	List.findOne({_id: req.query.listId}, function (err, list) {
-		if (err) res.sendStatus(500);
-		var tasks = [];
-		list.tasks.forEach(function (item) {
-			tasks.push({task: item});
-		})
-		Task.populate(tasks, {path: 'task'}, function (err, tasks) {
-			if (err) res.sendStatus(500);
-			res.json(tasks);
-		});
-	});
+router.get('/', (req, res) => {
+  return Promise.promisify(List.findOne)({_id: req.query.listId})
+    .then(list => {
+      const tasks = list.tasks.map(item => ({task: item}));
+      return Promise.promisify(Task.populate)(tasks, {path: 'task'})
+    })
+    .then(tasks => res.json(tasks))
+    .catch(err => res.status(500).send(err))
 });
 
-router.post('/addtask', function (req, res) {
-	var newTask = new Task({
+router.post('/addtask', (req, res) => {
+	const newTask = new Task({
 		owner: req.query.owner,
 		content: req.query.content
 	});
 
-	newTask.save(function (err) {
-		if (err) res.sendStatus(500);
-		List.findByIdAndUpdate(req.query.listId, {$push: {tasks: newTask._id}}, {safe: true, upsert: true}, 
-			function (err) {
-				if (err) res.sendStatus(500);
-				else res.sendStatus(200);
-		});
-	});
+	return Promise.promisify(newTask.save)
+    .then(() => Promise.promisify(
+      List.findByIdAndUpdate)(req.query.listId, {$push: {tasks: newTask._id}}, {safe: true, upsert: true}))
+    .then(() => res.status(200).send())
+    .catch(err => res.status(500).send(err))
 });
 
-router.delete('/removetask', function (req, res) {
-	Task.findByIdAndRemove(req.query.taskId, function (err, task) {
-		List.findByIdAndUpdate(req.query.listId, {$pull: {tasks: req.query.taskId}},
-			function (err) {
-				if (err) res.sendStatus(501);
-				else res.sendStatus(200);
-		});
-	});
+router.delete('/removetask', (req, res) => {
+  return Promise.all([
+    Promise.promisify(Task.findByIdAndRemove)(req.query.taskId),
+    Promise.promisify(Task.findByIdAndUpdate)(req.query.listId, {$pull: {tasks: req.query.taskId}})
+  ])
+    .then(() => res.status(200).send())
+    .catch(err => res.status(500).send(err))
 });
 
 module.exports = router;

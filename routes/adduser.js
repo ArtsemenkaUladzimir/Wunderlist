@@ -1,21 +1,18 @@
-var express = require('express');
-var router = express.Router();
+const Promise = require('bluebird');
+const express = require('express');
+const router = express.Router();
 
-var User = require('../models/user');
+const User = require('../models/user');
 
-router.post('/', function (req, res) {
-	var newUser = new User({
+router.post('/', (req, res) => {
+	const newUser = new User({
 		userName : req.query.username,
 		userEmail : req.query.useremail
 	});
 
-	newUser.save(function (err, newuser) {
-		if (err) {
-			return console.log('err');
-		}
-		res.location('users');
-		res.sendStatus(200);
-	});
+	return Promise.promisify(newUser.save)()
+    .then(() => res.status(200).location('users'))
+    .catch(err => res.status(500).send(err))
 });
 
 

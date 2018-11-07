@@ -1,11 +1,9 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-var taskSchema = new mongoose.Schema({
+const taskSchema = new mongoose.Schema({
 	owner: String,
 	content: String
 });
-
-var Task = mongoose.model('Task', taskSchema);
+const Task = mongoose.model('Task', taskSchema);
 
 module.exports = Task;

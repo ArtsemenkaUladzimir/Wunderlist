@@ -1,89 +1,61 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const Promise = require('bluebird');
+const router = express.Router();
 
-var User = require('../models/user');
-var List = require('../models/list');
-var Task = require('../models/task');
+const User = require('../models/user');
+const List = require('../models/list');
+const Task = require('../models/task');
 
-router.post('/addlist', function (req, res) {
-	var newList = new List({
+router.post('/addlist', (req, res) => {
+	const newList = new List({
 		title: req.query.title,
 		owner: req.query.userId
 	});
-	
-	newList.save(function (err, list) {
-		if (err) return console.log('err');
-		User.findByIdAndUpdate(req.query.userId, {$push: {list: newList._id}}, {safe: true, upsert: true},
-	 		function (err, doc	) {
-				if (err) console.log('err');
-				else res.sendStatus(200);
-		});
-	});
+
+	return Promise.all([
+	  Promise.promisify(newList.save)(),
+    Promise.promisify(
+      User.findByIdAndUpdate)(req.query.userId, {$push: {list: newList._id}}, {safe: true, upsert: true})
+  ])
+    .then(doc => res.status(200).send(doc))
+    .catch(err => res.status(500).send(err))
 });
 
-router.get('/:listId', function (req, res) {
-	var list = List.where({_id: req.params.listId});
-	list.findOne(function (err, list) {
-		if (err) console.log('err');
-		else res.json(list);
-	});
+router.get('/:listId', (req, res) => {
+	const list = List.where({_id: req.params.listId});
+	return Promise.promisify(list.findOne)()
+    .then(list => res.json(list))
+    .catch(err => res.status(500).send(err))
 });
 
-router.delete('/:listId/removelist', function (req, res) {
-	var list = List.where({_id: req.params.listId});
-	list.findOne(function (err, doc) {
-		// console.log(doc);
-		var users = [];
-		doc.shared.forEach(function (item) {
-			users.push(item);
-		});
-		// console.log(users);
-		users.forEach(function (item) {
-			User.findByIdAndUpdate(item, {$pull: {shared: req.params.listId}},
-				function (err) {
-					if (err) res.sendStatus(500);
-					else console.log('shared list in users removed');
-				});
-		});
-
-		var tasks = [];
-		doc.tasks.forEach(function (item) {
-			tasks.push(item);
-		});
-		tasks.forEach(function (item) {
-			Task.findByIdAndRemove(item, function () {
-				if (err) res.sendStatus(500);
-				else console.log('task removed');
-			});
-		});
-
-		User.findByIdAndUpdate(doc.owner, {$pull: {list: req.params.listId}},
-			function (err) {
-				if (err) res.sendStatus(500);
-				else console.log('owners removed list');
-			});
-
-		list.remove(function (err, list) {
-			if (err) res.sendStatus(500);
-			else res.sendStatus(200);
-		});
-	});
+router.delete('/:listId/removelist', (req, res) => {
+  const list = List.where({_id: req.params.listId});
+  return Promise.promisify(list.findOne)()
+    .then(doc => {
+      return Promise.all([
+        Promise.all(
+          doc.shared.map(user => Promise.promisify(
+            User.findByIdAndUpdate)(user, {$pull: {shared: req.params.listId}})
+          )
+        ),
+        Promise.all(
+          doc.tasks.map(task => Promise.promisify(
+            Task.findById)(task)
+          )
+        ),
+        Promise.promisify(
+          User.findByIdAndUpdate)(doc.owner, {$pull: {list: req.params.listId}}),
+        Promise.promisify(list.remove)()
+      ])
+    })
+    .then(() => res.status(200).send())
+    .catch(err => res.status(500).send(err))
 });
 
-router.put('/:listId/sharedList', function (req, res) {
-	console.log(req.query.userId);
-	console.log(req.params.listId);
-	User.findByIdAndUpdate(req.query.userId, {$addToSet: {shared: req.params.listId}},
-		function (err, user) {
-			if (err) console.log('err');
-			else {
-				List.findByIdAndUpdate(req.params.listId, {$addToSet: {shared: user._id}},
-					function (err) {
-						if (err) res.sendStatus(500);
-						else res.sendStatus(200);
-					});
-			}
-		});
+router.put('/:listId/sharedList', (req, res) => {
+  return Promise.promisify(User.findByIdAndUpdate)(req.query.userId, {$addToSet: {shared: req.params.listId}})
+    .then(user => Promise.promisify(List.findByIdAndUpdate)(req.params.listId, {$addToSet: {shared: user._id}}))
+    .catch(err => res.status(500).send(err))
 });
 
 module.exports = router;
