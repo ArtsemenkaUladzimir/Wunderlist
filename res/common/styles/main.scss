@@ -1,6 +1,3 @@
-@import url('reset.css');
-@import url('font-face.css');
-
 a {
     text-decoration: none;
 }
@@ -57,7 +54,7 @@ header {
     width: 100%;
     height: 110px;
     padding: 1.625em 1em 1.875em;
-    background: rgba(73, 127, 168, 0.3) url('../image/header.png');
+    background: rgba(73, 127, 168, 0.3) url('../images/header.png');
     background-position: center;
 }
 
@@ -349,7 +346,7 @@ footer span:before {
     position: absolute;
     width: 0;
     height: 0;
-    border-bottom: 30px solid #207195; 
+    border-bottom: 30px solid #207195;
     border-left: 50px solid transparent;
     bottom: 0;
     left: -50px;

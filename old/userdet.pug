@@ -1,0 +1,11 @@
+div
+	span.head_list User details:
+	a.button(href='users/{{userId}}/createList') Create list
+	a.button(href='#', ng-click='removeUser()') Delete user
+	section.list_container
+		ul.owner
+			li(ng-repeat='list in lists')
+				a(href='/users/{{userId}}/{{list._id}}') {{list.title}}
+		ul.shared
+			li(ng-repeat='list in shared')
+				a(href='/users/{{userId}}/{{list._id}}') {{list.title}}

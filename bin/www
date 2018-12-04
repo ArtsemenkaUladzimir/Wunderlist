@@ -16,13 +16,6 @@ const port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 /**
- * Get mongo url from environment and store in Express.
- */
-
-const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost';
-app.set('mongoUrl', mongoUrl);
-
-/**
  * Create HTTP server.
  */
 

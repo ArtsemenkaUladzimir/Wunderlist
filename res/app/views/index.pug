@@ -1,0 +1,47 @@
+doctype html
+html(lang='en', ng-app='app')
+  head
+    meta(charset='utf-8')
+    base(href='/')
+
+    title Wunderlist
+
+  body
+    .wrapper
+      img.noblur(src='static/images/main_bg.jpg', alt='')
+      img.blur(src='static/images/main_bg_blur.jpg', alt='')
+      header
+        .header_content
+          .logo
+            a(href='/')
+              h1
+                img(src='static/images/logo.png', alt='')
+                span
+                  base(href='/')
+          nav
+            ul
+              li
+                a(href='users') Users
+              li
+                a(href='newuser') Sign up
+      .main
+        div
+          .content
+            article
+              div(ng-view='')
+      footer
+        span © vinfinit, 2015.
+
+      script(src = 'static/app/bundle.js')
+      script.
+        window.onload = function() {
+          var height = document.documentElement.clientHeight;
+          var width = document.documentElement.clientWidth;
+          var ratio = width/(2*height);
+          var ratioConst = 1.125;
+          var h = Math.max(height - 110, 688);
+          var el = document.querySelector('.main>div');
+          el.style.height = h + 'px';
+          console.log(ratio);
+        }
+

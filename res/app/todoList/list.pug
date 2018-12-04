@@ -1,0 +1,14 @@
+div
+	span.head_list {{list.title}}:
+	a.button.list_delete(href='#', ng-click='removeList()') Delete list
+	form(ng-submit='addTask()')
+		input(type='text', placeholder='Some task', ng-model='content', required='')
+	ul
+		li(ng-repeat='task in tasks')
+			| {{task.task.content}}
+			a.button.task_delete(href='#', ng-click='removeTask()') ×
+	span.head_list User search
+	input(ng-model='query', type='text', placeholder='search')
+	ul
+		li(ng-repeat='user in users | filter: query')
+			a(href='{{user._id}}', ng-click='addToShared()') {{user.userName}}
