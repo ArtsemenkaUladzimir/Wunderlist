@@ -1,8 +1,8 @@
-module.exports = ($http, $q) => {
+module.exports = ($http) => {
   function removeUser (id) {
     return $http({
       method: 'delete',
-      url: 'users/' + id + '/deleteuser',
+      url: 'user/' + id + '/deleteuser',
       params: {
         userId: id
       }
@@ -27,9 +27,9 @@ module.exports = ($http, $q) => {
     });
   }
 
-  return ({
+  return {
     removeUser,
     addUser,
     getUsers
-  })
+  }
 };

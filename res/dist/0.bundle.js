@@ -40,7 +40,51 @@ eval("exports = module.exports = __webpack_require__(/*! ../../../node_modules/c
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("module.exports = angular.module('users', [\n  __webpack_require__(/*! ./usersList */ \"./res/app/users/usersList/index.js\").name\n])\n  .factory('UserService', __webpack_require__(/*! ./userService */ \"./res/app/users/userService.js\"));\n\n\n//# sourceURL=webpack:///./res/app/users/index.js?");
+eval("module.exports = angular.module('users', [\n\n])\n  .config(($routeProvider) => {\n    $routeProvider\n      .when('/user/all', {\n        template: __webpack_require__(/*! ./userList/userList.pug */ \"./res/app/users/userList/userList.pug\"),\n        controller: 'UserListCtrl'\n      })\n      .when('/user/signup', {\n        template: __webpack_require__(/*! ./signup/signup.pug */ \"./res/app/users/signup/signup.pug\"),\n        controller: 'SignupCtrl'\n      })\n  })\n  .factory('UserService', __webpack_require__(/*! ./userService */ \"./res/app/users/userService.js\"))\n  .controller('UserListCtrl', __webpack_require__(/*! ./userList/userListCtrl */ \"./res/app/users/userList/userListCtrl.js\"))\n  .controller('SignupCtrl', __webpack_require__(/*! ./signup/signupCtrl */ \"./res/app/users/signup/signupCtrl.js\"));\n\n\n//# sourceURL=webpack:///./res/app/users/index.js?");
+
+/***/ }),
+
+/***/ "./res/app/users/signup/signup.pug":
+/*!*****************************************!*\
+  !*** ./res/app/users/signup/signup.pug ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var pug = __webpack_require__(/*! ../../../../node_modules/pug-runtime/index.js */ \"./node_modules/pug-runtime/index.js\");\n\nfunction template(locals) {var pug_html = \"\", pug_mixins = {}, pug_interp;pug_html = pug_html + \"\\u003Cdiv\\u003E\\u003Cspan class=\\\"head_list\\\"\\u003ENew user\\u003C\\u002Fspan\\u003E\\u003Cform ng-submit=\\\"addUser()\\\" name=\\\"adduserForm\\\"\\u003E\\u003Cinput type=\\\"text\\\" placeholder=\\\"Username\\\" name=\\\"username\\\" ng-model=\\\"username\\\" required=\\\"\\\"\\u003E\\u003Cinput type=\\\"email\\\" placeholder=\\\"Email\\\" name=\\\"useremail\\\" ng-model=\\\"useremail\\\" required=\\\"\\\"\\u003E\\u003Cbutton type=\\\"submit\\\"\\u003EOK!\\u003C\\u002Fbutton\\u003E\\u003C\\u002Fform\\u003E\\u003C\\u002Fdiv\\u003E\";;return pug_html;};\nmodule.exports = template;\n\n//# sourceURL=webpack:///./res/app/users/signup/signup.pug?");
+
+/***/ }),
+
+/***/ "./res/app/users/signup/signupCtrl.js":
+/*!********************************************!*\
+  !*** ./res/app/users/signup/signupCtrl.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = ($location, $scope, UserService) => {\n  $scope.addUser = () => {\n    UserService.addUser($scope.username, $scope.useremail)\n      .then(() => {\n        $location.path(\"/users\");\n      });\n  }\n};\n\n\n//# sourceURL=webpack:///./res/app/users/signup/signupCtrl.js?");
+
+/***/ }),
+
+/***/ "./res/app/users/userList/userList.pug":
+/*!*********************************************!*\
+  !*** ./res/app/users/userList/userList.pug ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var pug = __webpack_require__(/*! ../../../../node_modules/pug-runtime/index.js */ \"./node_modules/pug-runtime/index.js\");\n\nfunction template(locals) {var pug_html = \"\", pug_mixins = {}, pug_interp;pug_html = pug_html + \"\\u003Cdiv\\u003E\\u003Cspan class=\\\"head_list\\\"\\u003EList of users:\\u003C\\u002Fspan\\u003E\\u003Cul\\u003E\\u003Cli ng-repeat=\\\"user in users\\\"\\u003E\\u003Ca ng-href=\\\"user\\u002F{{user._id}}\\\"\\u003E{{user.userName}}\\u003C\\u002Fa\\u003E\\u003C\\u002Fli\\u003E\\u003C\\u002Ful\\u003E\\u003C\\u002Fdiv\\u003E\";;return pug_html;};\nmodule.exports = template;\n\n//# sourceURL=webpack:///./res/app/users/userList/userList.pug?");
+
+/***/ }),
+
+/***/ "./res/app/users/userList/userListCtrl.js":
+/*!************************************************!*\
+  !*** ./res/app/users/userList/userListCtrl.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = ($scope, UserService) => {\n  $scope.users = UserService.getUsers();\n};\n\n\n//# sourceURL=webpack:///./res/app/users/userList/userListCtrl.js?");
 
 /***/ }),
 
@@ -51,40 +95,7 @@ eval("module.exports = angular.module('users', [\n  __webpack_require__(/*! ./us
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("module.exports = ($http, $q) => {\n  function removeUser (id) {\n    return $http({\n      method: 'delete',\n      url: 'users/' + id + '/deleteuser',\n      params: {\n        userId: id\n      }\n    });\n  }\n\n  function addUser (name, email) {\n    return $http({\n      method: 'post',\n      url: 'adduser',\n      params: {\n        username: name,\n        useremail: email\n      }\n    });\n  }\n\n  function getUsers () {\n    return $http({\n      method: 'get',\n      url: 'users'\n    });\n  }\n\n  return ({\n    removeUser,\n    addUser,\n    getUsers\n  })\n};\n\n\n//# sourceURL=webpack:///./res/app/users/userService.js?");
-
-/***/ }),
-
-/***/ "./res/app/users/usersList/index.js":
-/*!******************************************!*\
-  !*** ./res/app/users/usersList/index.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("angular.module('usersCtrl', [\n  'UserService'\n])\n  .run(['$templateCache', $templateCache => {\n    $templateCache.put('users/usersList/usersList.pug',\n      __webpack_require__(/*! ./usersList.pug */ \"./res/app/users/usersList/usersList.pug\")\n    )\n  }])\n  .controller(__webpack_require__(/*! ./usersListCtrl */ \"./res/app/users/usersList/usersListCtrl.js\"));\n\n\n//# sourceURL=webpack:///./res/app/users/usersList/index.js?");
-
-/***/ }),
-
-/***/ "./res/app/users/usersList/usersList.pug":
-/*!***********************************************!*\
-  !*** ./res/app/users/usersList/usersList.pug ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("var pug = __webpack_require__(/*! ../../../../node_modules/pug-runtime/index.js */ \"./node_modules/pug-runtime/index.js\");\n\nfunction template(locals) {var pug_html = \"\", pug_mixins = {}, pug_interp;pug_html = pug_html + \"\\u003Cdiv\\u003E\\u003Cspan class=\\\"head_list\\\"\\u003EList of users:\\u003C\\u002Fspan\\u003E\\u003Cul\\u003E\\u003Cli ng-repeat=\\\"user in users\\\"\\u003E\\u003Ca ng-href=\\\"users\\u002F{{user._id}}\\\"\\u003E{{user.userName}}\\u003C\\u002Fa\\u003E\\u003C\\u002Fli\\u003E\\u003C\\u002Ful\\u003E\\u003C\\u002Fdiv\\u003E\";;return pug_html;};\nmodule.exports = template;\n\n//# sourceURL=webpack:///./res/app/users/usersList/usersList.pug?");
-
-/***/ }),
-
-/***/ "./res/app/users/usersList/usersListCtrl.js":
-/*!**************************************************!*\
-  !*** ./res/app/users/usersList/usersListCtrl.js ***!
-  \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = ($scope, User) => {\n  $scope.users = User.getUsers();\n  console.log($scope.users);\n};\n\n\n//# sourceURL=webpack:///./res/app/users/usersList/usersListCtrl.js?");
+eval("module.exports = ($http, $q) => {\n  function removeUser (id) {\n    return $http({\n      method: 'delete',\n      url: 'user/' + id + '/deleteuser',\n      params: {\n        userId: id\n      }\n    });\n  }\n\n  function addUser (name, email) {\n    return $http({\n      method: 'post',\n      url: 'adduser',\n      params: {\n        username: name,\n        useremail: email\n      }\n    });\n  }\n\n  function getUsers () {\n    return $http({\n      method: 'get',\n      url: 'users'\n    });\n  }\n\n  return {\n    removeUser,\n    addUser,\n    getUsers\n  }\n};\n\n\n//# sourceURL=webpack:///./res/app/users/userService.js?");
 
 /***/ }),
 

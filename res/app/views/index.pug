@@ -21,14 +21,14 @@ html(lang='en', ng-app='app')
           nav
             ul
               li
-                a(href='users') Users
+                a(ng-href='#!/user/all') Users
               li
-                a(href='newuser') Sign up
+                a(ng-href='#!/user/signup') Sign up
       .main
         div
           .content
             article
-              div(ng-view='')
+              div(ng-view)
       footer
         span © vinfinit, 2015.
 

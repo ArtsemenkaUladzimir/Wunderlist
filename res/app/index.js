@@ -7,10 +7,12 @@ require.ensure([], (require) => {
   require('../common/styles/main.scss');
 
   angular.module('app', [
+    'ngRoute',
     require('./users').name
   ])
     .config(($routeProvider, $locationProvider) => {
       $locationProvider.hashPrefix('!');
+
       $routeProvider
         .otherwise({
           redirectTo: '/home'
